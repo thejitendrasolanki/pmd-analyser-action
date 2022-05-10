@@ -30,9 +30,6 @@ else
     pmd-bin-"${PMD_VERSION}"/bin/run.sh pmd -filelist diff-file.csv -R "$RULES_PATH" -failOnViolation false -f sarif > pmd-raw-output.sarif
 fi
 # Loop through each rule and see if an error should be thrown
-echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
-echo "$(cat pmd-raw-output.sarif | jq --compact-output '.runs[] .tool .driver .rules[]')"
-echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
 echo "::set-output name=error-found::false"
 while read -r rule; do
     RULE="$(echo "$rule" | jq --raw-output '.id')"
@@ -46,3 +43,8 @@ cat pmd-raw-output.sarif | jq --arg workspace "$WORKSPACE" '(.runs[] .results[] 
 # Set the rule level configurations for whether they are notes or errors
 cat pmd-file-locations-output.sarif | jq --arg errors "$ERROR_RULES" '((.runs[] .tool .driver .rules[]) | select(.id==($errors | split(",")[]))) += {"defaultConfiguration": {"level": "error"}}' > pmd-errors-output.sarif
 cat pmd-errors-output.sarif | jq --arg notes "$NOTE_RULES" '((.runs[] .tool .driver .rules[]) | select(.id==($notes | split(",")[]))) += {"defaultConfiguration": {"level": "note"}}' > pmd-output.sarif
+
+echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
+echo cat pmd-errors-output.sarif | jq --arg notes "$NOTE_RULES" '((.runs[] .tool .driver .rules[]) | select(.id==($notes | split(",")[]))) += {"defaultConfiguration": {"level": "note"}}'
+echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
+
