@@ -43,17 +43,6 @@ jobs:
           rules-path: './pmd-ruleset.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
-      - name: Download artifact
-        uses: aochmann/actions-download-artifact@1.0.0
-        with:
-          # Optional, GitHub token
-          github_token: ${{secrets.GITHUB_TOKEN}}
-
-          # Optional, uploaded artifact name,
-          # will download all artifacts if not specified
-          # and extract them in respective subdirectories
-          # https://github.com/actions/download-artifact#download-all-artifacts
-          name: pmd-output.sarif
       - name: SARIF Multitool
         uses: microsoft/sarif-actions@v0.1
         with:
