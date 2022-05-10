@@ -1,4 +1,5 @@
 # pmd-analyser-action
+[![PMD Static Code Analysis](https://github.com/thejitendrasolanki/pmd-analyser-action/actions/workflows/main.yml/badge.svg)](https://github.com/thejitendrasolanki/pmd-analyser-action/actions/workflows/main.yml)
 
 GitHub Action to run [PMD Analyser](https://pmd.github.io/) based on the ruleset defined. This action generates a SARIF report which can be uploaded to GitHub.
 
