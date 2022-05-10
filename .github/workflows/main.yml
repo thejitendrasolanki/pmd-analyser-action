@@ -25,7 +25,7 @@ jobs:
       - name: Run Full PMD Analysis
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         id: pmd-full-analysis
-        uses: ./.github/actions/pmd-analyser-action
+        uses: ./pmd-analyser-action
         with:
           analyse-all-code: 'true'
           pmd-version: 'latest'
@@ -36,7 +36,7 @@ jobs:
       - name: Run PMD Analysis on Files Changed
         id: pmd-partial-analysis
         if: github.event.pull_request != null
-        uses: ./.github/actions/pmd-analyser-action
+        uses: ./pmd-analyser-action
         with:
           pmd-version: 'latest'
           file-path: './src'
