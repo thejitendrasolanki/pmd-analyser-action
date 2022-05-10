@@ -9,6 +9,7 @@ fi
 # Download PMD
 wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F"${PMD_VERSION}"/pmd-bin-"${PMD_VERSION}".zip
 unzip pmd-bin-"${PMD_VERSION}".zip
+echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
 # Now either run the full analysis or files changed based on the settings defined
 if [ "$ANALYSE_ALL_CODE" == 'true' ]; then
     pmd-bin-"${PMD_VERSION}"/bin/run.sh pmd -d "$FILE_PATH" -R "$RULES_PATH" -failOnViolation false -f sarif > pmd-raw-output.sarif
