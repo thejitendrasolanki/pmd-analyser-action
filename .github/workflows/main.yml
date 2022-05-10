@@ -36,7 +36,7 @@ jobs:
       - name: Run PMD Analysis on Files Changed
         id: pmd-partial-analysis
         if: github.event.pull_request != null
-        uses: actions/checkout@v2/pmd-analyser-action@v2.1
+        uses: thejitendrasolanki/pmd-analyser-action@v2.1
         with:
           pmd-version: 'latest'
           file-path: './src'
