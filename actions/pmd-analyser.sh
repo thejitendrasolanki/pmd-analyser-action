@@ -31,7 +31,7 @@ else
 fi
 # Loop through each rule and see if an error should be thrown
 echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
-echo "$(pmd-raw-output.sarif)"
+echo "$(cat pmd-raw-output.sarif | jq --compact-output '.runs[] .tool .driver .rules[]')"
 echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
 echo "::set-output name=error-found::false"
 while read -r rule; do
