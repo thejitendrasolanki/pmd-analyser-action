@@ -30,7 +30,7 @@ jobs:
           analyse-all-code: 'true'
           pmd-version: 'latest'
           file-path: './src'
-          rules-path: './pmd-ruleset.xml'
+          rules-path: './pmd-rulesets/apexAllRuleSet.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
       - name: Run PMD Analysis on Files Changed
@@ -40,7 +40,7 @@ jobs:
         with:
           pmd-version: 'latest'
           file-path: './src'
-          rules-path: './pmd-ruleset.xml'
+          rules-path: './pmd-rulesets/apexAllRuleSet.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
       - name: SARIF Multitool
