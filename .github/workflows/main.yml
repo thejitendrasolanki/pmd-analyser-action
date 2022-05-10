@@ -1,0 +1,55 @@
+name: PMD Static Code Analysis
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  pmd-analyser-check:
+    name: PMD Static Code Analysis
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          # Incremental diffs require fetch depth to be at 0 to grab the target branch
+          fetch-depth: '0'
+      - name: Run Full PMD Analysis
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        id: pmd-full-analysis
+        uses: synergy-au/pmd-analyser-action@v2.1
+        with:
+          analyse-all-code: 'true'
+          pmd-version: 'latest'
+          file-path: './src'
+          rules-path: './pmd-ruleset.xml'
+          error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
+          note-rules: 'ApexDoc'
+      - name: Run PMD Analysis on Files Changed
+        id: pmd-partial-analysis
+        if: github.event.pull_request != null
+        uses: synergy-au/pmd-analyser-action@v2.1
+        with:
+          pmd-version: 'latest'
+          file-path: './src'
+          rules-path: './pmd-ruleset.xml'
+          error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
+          note-rules: 'ApexDoc'
+      - name: Upload results to GitHub
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: pmd-output.sarif
+      - name: No PMD Errors?
+        run: |
+          if ${{ steps.pmd-full-analysis.outputs.error-found }} ${{ steps.pmd-partial-analysis.outputs.error-found }}
+          then
+            exit 3
+          fi
