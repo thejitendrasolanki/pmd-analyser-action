@@ -43,10 +43,11 @@ jobs:
           rules-path: './pmd-ruleset.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
-      - name: Upload results to GitHub
-        uses: github/codeql-action/upload-sarif@v1
+      - name: SARIF Multitool
+        uses: microsoft/sarif-actions@v0.1
         with:
-          sarif_file: pmd-output.sarif
+          # Command to be sent to SARIF Multitool
+          command: 'validate pmd-output.sarif'
       - name: No PMD Errors?
         run: |
           if ${{ steps.pmd-full-analysis.outputs.error-found }} ${{ steps.pmd-partial-analysis.outputs.error-found }}
