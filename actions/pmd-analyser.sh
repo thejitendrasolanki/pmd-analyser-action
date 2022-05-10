@@ -31,6 +31,8 @@ else
 fi
 # Loop through each rule and see if an error should be thrown
 echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
+echo "kkkkkkkkkkkk"+pmd-raw-output.sarif
+echo "kkkkkkkkkkkk"+"$ANALYSE_ALL_CODE"
 echo "::set-output name=error-found::false"
 while read -r rule; do
     RULE="$(echo "$rule" | jq --raw-output '.id')"
