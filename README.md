@@ -20,6 +20,11 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'action/**'
+      - 'pmd-rulesets/**'
+      - 'src/**'
+      - 'pmd-analyser.sh'
   workflow_dispatch:
 
 jobs:
@@ -39,34 +44,40 @@ jobs:
       - name: Run Full PMD Analysis
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         id: pmd-full-analysis
-        uses: synergy-au/pmd-analyser-action@v2.1
+        uses: ./actions
         with:
           analyse-all-code: 'true'
           pmd-version: 'latest'
           file-path: './src'
-          rules-path: './pmd-ruleset.xml'
+          rules-path: './pmd-rulesets/apexAllRuleSet.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
       - name: Run PMD Analysis on Files Changed
         id: pmd-partial-analysis
         if: github.event.pull_request != null
-        uses: synergy-au/pmd-analyser-action@v2.1
+        uses: ./actions
         with:
           pmd-version: 'latest'
           file-path: './src'
-          rules-path: './pmd-ruleset.xml'
+          rules-path: './pmd-rulesets/apexAllRuleSet.xml'
           error-rules: 'AvoidDirectAccessTriggerMap,AvoidDmlStatementsInLoops,AvoidHardcodingId'
           note-rules: 'ApexDoc'
       - name: Upload results to GitHub
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: pmd-output.sarif
+      - name: SARIF Multitool
+        uses: microsoft/sarif-actions@v0.1
+        with:
+          # Command to be sent to SARIF Multitool
+          command: 'validate pmd-output.sarif'
       - name: No PMD Errors?
         run: |
           if ${{ steps.pmd-full-analysis.outputs.error-found }} ${{ steps.pmd-partial-analysis.outputs.error-found }}
           then
             exit 3
           fi
+
 ```
 
 ## Inputs
