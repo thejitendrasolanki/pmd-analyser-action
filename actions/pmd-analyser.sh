@@ -36,10 +36,4 @@ while read -r rule; do
         echo "::set-output name=error-found::true"
         break
     fi
-done <<< "$(cat pmd-raw-output.xml | jq --compact-output '.runs[] .tool .driver .rules[]')"
-# Set the correct file location for the report
-cat pmd-raw-output.xml | jq --arg workspace "$WORKSPACE" '(.runs[] .results[] .locations[] .physicalLocation .artifactLocation .uri) |= ltrimstr($workspace)' > pmd-file-locations-output.xml
-# Set the rule level configurations for whether they are notes or errors
-cat pmd-file-locations-output.xml | jq --arg errors "$ERROR_RULES" '((.runs[] .tool .driver .rules[]) | select(.id==($errors | split(",")[]))) += {"defaultConfiguration": {"level": "error"}}' > pmd-errors-output.xml
-cat pmd-errors-output.xml | jq --arg notes "$NOTE_RULES" '((.runs[] .tool .driver .rules[]) | select(.id==($notes | split(",")[]))) += {"defaultConfiguration": {"level": "note"}}' > pmd-output.xml
 cat pmd-output.xml
