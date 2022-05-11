@@ -11,6 +11,7 @@ public class demo extends Bar {
 	}
 	
 	public void bar(Integer x, Integer y, Integer z) {
+    int a;
         if (x>y) {
             if (y>z) {
                 if (z==x) {
